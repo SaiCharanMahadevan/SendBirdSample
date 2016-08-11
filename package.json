@@ -9,6 +9,6 @@
     "lodash": "^4.14.2",
     "react": "15.2.1",
     "react-native": "0.31.0",
-    "sendbird": "^2.4.24"
+    "sendbird": "^2.4.18"
   }
 }

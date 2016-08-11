@@ -1,6 +1,9 @@
 'use strict';
 import React, { Component } from 'react';
 import { TouchableHighlight, NavigatorIOS, TextInput, AppRegistry, Text, View, StyleSheet } from 'react-native';
+import SendBird from 'sendbird';
+
+import Channel from './channel';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,11 +14,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderWidth: 0.5,
+    borderWidth: 0.8,
     padding: 10,
-    width: 300,
+    width: 200,
     alignSelf: 'center',
-    borderRadius: 1,
+    borderRadius: 3,
     borderColor: '#00AAFF',
     backgroundColor: 'white',
     fontSize: 15
@@ -24,9 +27,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: '#00AAFF',
     height: 40,
-    width: 300,
+    width: 200,
     alignSelf: 'center',
-    borderRadius: 1,
+    borderRadius: 3,
     justifyContent: 'center',
   }
 });
@@ -40,15 +43,27 @@ export default class Login extends Component {
     }
   }
 
-  loginInput(text, field) {
-    if(field) {
-      
-    }
+  loginInput(text) {
     this.setState({username: text})
   }
 
   login() {
-    console.log(this.state.username);
+    SendBird.init({
+      app_id: 'A7A2672C-AD11-11E4-8DAA-0A18B21C2D82',
+      guest_id: this.state.username,
+      user_name: this.state.username,
+      image_url: "",
+      access_token: "",
+      successFunc: (data) => {
+        this.props.navigator.push({
+          title: 'Channel',
+          component: Channel
+        })
+      },
+      errorFunc: (status, error) => {
+        this.setState({username: ''});
+      }
+    });
   }
 
   render () {
@@ -58,11 +73,7 @@ export default class Login extends Component {
           <TextInput
             style={styles.textInput}
             placeholder="Username"
-            onChangeText={this.loginInput.bind(this, 'username')}/>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Password"
-            onChangeText={this.loginInput.bind(this, 'password')}/>
+            onChangeText={this.loginInput.bind(this)}/>
           <TouchableHighlight
             style={styles.button}
             underlayColor='#9bc2cf'
